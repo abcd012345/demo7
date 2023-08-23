@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    checkout scm
+                }
+            }
+        }
+
+        stage('Pull Git Content') {
+            when {
+                changeset "develop"
+            }
+            steps {
+                script {
+                    dir('target_folder') {
+                        // Replace 'git_repository_url' with your actual repository URL
+                        sh "git clone -b develop --depth 1 git_repository_url ."
+                        echo "Git content pulled successfully."
+                    }
+                }
+            }
+        }
+    }
+}
